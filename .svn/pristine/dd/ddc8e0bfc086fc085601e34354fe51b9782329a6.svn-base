@@ -1,0 +1,68 @@
+package com.example.robta.netwalk;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.view.View;
+
+import static java.lang.Math.floor;
+
+/**
+ * Created by robta on 04/02/2017.
+ */
+
+public class GameView extends View{
+
+    private Paint mServerPaint;
+    private Paint mElsePaint;
+
+    public GameView(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        int rowCount = Game.getGrid().getRows();
+        int columnCount = Game.getGrid().getColumns();
+
+        double diameterX = floor(getWidth()/(columnCount+(columnCount+1)));
+        double diameterY = floor(getHeight()/(rowCount+(rowCount+1)));
+
+        double diameter;
+
+        if (diameterY <= diameterX) {
+            diameter = diameterX;
+        }
+        else {
+            diameter = diameterY;
+        }
+
+        double availableWidth = (columnCount+1) * diameter + columnCount * diameterX;
+        double availableHeight = (rowCount+1) * diameter + rowCount * diameterY;
+
+        double seperator = diameter * 0.1;
+
+        mServerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mServerPaint.setStyle(Paint.Style.FILL);
+        mServerPaint.setColor(0xff0000ff);
+
+        mElsePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mElsePaint.setStyle(Paint.Style.FILL);
+        mElsePaint.setColor(0xffffffff);
+
+        for (int col = 0; col < columnCount; col++) {
+            for (int row = 0; row < rowCount; row++) {
+                if (Game.getGrid().isServer(row, col) == true) {
+                    canvas.drawRect(row, col, 50, 50, mServerPaint);
+                }
+                else {
+                    canvas.drawRect(row, col, 50, 50, mElsePaint);
+                }
+            }
+        }
+
+
+    }
+}

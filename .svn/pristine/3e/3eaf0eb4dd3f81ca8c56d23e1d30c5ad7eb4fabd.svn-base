@@ -1,0 +1,142 @@
+package com.example.robta.netwalk;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.widget.Toast;
+
+import java.util.Random;
+
+/**
+ * Starts a new game, creates instance of GameView, manages running game.
+ */
+public class Game extends AppCompatActivity {
+
+    //Define instance of NetwalkGrid
+    private static NetwalkGrid grid;
+
+    //Define instance of GameView
+    private GameView mGameView;
+
+    //Define instance of GestureDetector
+    private GestureDetector mDetector;
+
+    //totalTaps to show to user
+    private int totalTaps = 0;
+
+    /**
+     * Called when Game is initialized.
+     * Initialises grid with custom rows and columns.
+     * Switches to GameView.
+     * Sets up GestureDetector.
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Get the intent and variables it stores.
+        Intent intent = getIntent();
+        int rows = intent.getIntExtra("rows", 0);
+        int columns = intent.getIntExtra("columns", 0);
+        //Initialize grid with custom variables.
+        grid = new NetwalkGrid(rows, columns);
+
+        //Set activity to game activity
+        setContentView(R.layout.activity_game);
+        mGameView = new GameView(getApplicationContext());
+        setContentView(mGameView);
+
+        //Setup GestureDetector
+        mDetector = new GestureDetector(this, new gListener());
+    }
+
+    /**
+     * Called when the game finishes, starts new activity with info about game.
+     */
+    public void gameOver() {
+        //Load GameOver activity, send totalTaps
+        Intent intent = new Intent(this, GameOver.class);
+        intent.putExtra("taps", totalTaps);
+        startActivity(intent);
+        //Finish activity after view exits.
+        finish();
+    }
+
+    /**
+     * Called when the user taps.
+     * Calls classes to calculate which cell was tapped and to check solution to puzzle.
+     * Contains debugging code.
+     * @param e The event produced by user tap.
+     * @return
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        //Only allow input while loop is true
+        //Detect if action was down to stop it firing twice
+        //Idea from http://stackoverflow.com/questions/8182513/ontouch-event-of-ontouchlistener-gets-called-twice-in-android
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            totalTaps++;
+
+            //Code for 1 in 100 chance for random scramble
+            //Generate new random number up to 100
+            Random rand = new Random();
+            int random = rand.nextInt(99);
+            //If number is 98 then scramble
+            if (random == 98) {
+                //Display notification to user so they are not confused
+                String scramble = "Oh no! You are unlucky enough to have the grid randomly scrambled.";
+                Toast.makeText(this, scramble, Toast.LENGTH_LONG).show();
+                //Call randomScramble
+                mGameView.randomScramble();
+            }
+
+            //Get coordinates of last tap
+            double currentX = e.getX();
+            double currentY = e.getY();
+
+            //Used for debugging - show X and Y coordinates as toast notification
+            //String XY = String.valueOf(currentX) + " " + String.valueOf(currentY);
+            //Toast.makeText(this, XY, Toast.LENGTH_LONG).show();
+
+            //Convert double to int
+            int x = (int) currentX;
+            int y = (int) currentY;
+
+            //Call calculateTappedCell to deal with tap.
+            mGameView.calculateTappedCell(x, y);
+
+            //Used for debugging - get cell of tap
+            //int[] cell = mGameView.calculateTappedCell(x, y);
+            //String currentCell = "X: " + String.valueOf(cell[0]) + " Y: " + String.valueOf(cell[1]);
+            //Toast.makeText(this, currentCell, Toast.LENGTH_LONG).show();
+
+            //Used for debugging - find element that has been tapped
+            //int gridElement = mGameView.getTappedItem(x, y);
+            //String tappedElement = String.valueOf(gridElement);
+            //Toast.makeText(this, tappedElement, Toast.LENGTH_LONG).show();
+
+            //Call checkPuzzleSolved to check if the puzzle has been solved, store in boolean.
+            boolean win = mGameView.checkWin();
+            //If puzzle has been solved
+            if (win == true) {
+                gameOver();
+            }
+
+            return true;
+        }
+        return true;
+    }
+
+
+    /**
+     * Get the generated grid
+     * @return The generated grid
+     */
+    public static NetwalkGrid getGrid() {
+        return grid;
+    }
+
+}

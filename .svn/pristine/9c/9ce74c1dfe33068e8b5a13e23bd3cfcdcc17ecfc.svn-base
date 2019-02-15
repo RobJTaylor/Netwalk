@@ -1,0 +1,86 @@
+package com.example.robta.netwalk;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.view.View;
+
+import static java.lang.Math.floor;
+
+/**
+ * Created by robta on 04/02/2017.
+ */
+
+public class GameView extends View{
+
+    private Paint mServerPaint;
+    private Paint mElsePaint;
+    private VectorDrawableCompat vector;
+
+    public GameView(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        int rowCount = Game.getGrid().getRows();
+        int columnCount = Game.getGrid().getColumns();
+
+        double diameterX = floor(getWidth()/(columnCount+(columnCount+1)));
+        double diameterY = floor(getHeight()/(rowCount+(rowCount+1)));
+
+        double diameter;
+
+        if (diameterY <= diameterX) {
+            diameter = diameterX;
+        }
+        else {
+            diameter = diameterY;
+        }
+
+        double availableWidth = (columnCount+1) * diameter + columnCount * diameterX;
+        double availableHeight = (rowCount+1) * diameter + rowCount * diameterY;
+
+        double seperator = diameter * 0.1;
+
+        mServerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mServerPaint.setStyle(Paint.Style.FILL);
+        mServerPaint.setColor(0xff0000ff);
+
+        mElsePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mElsePaint.setStyle(Paint.Style.FILL);
+        mElsePaint.setColor(0xffffffff);
+
+        for (int col = 0; col < columnCount; col++) {
+            for (int row = 0; row < rowCount; row++) {
+                Paint paint;
+
+                float cx = (float)(seperator + (diameter + seperator) * col + diameter / 2);
+                float cy = (float)(seperator + (diameter + seperator) * row + diameter / 2);
+
+                if (Game.getGrid().isServer(row, col) == true) {
+                    paint = mServerPaint;
+                    vector = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_linered, null);
+                    vector.setBounds(row, col, 20, 20);
+                    canvas.translate(cx, cy);
+                    vector.draw(canvas);
+                }
+                else {
+                    paint = mElsePaint;
+                    vector = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_linegreen, null);
+                    vector.setBounds(row, col, 20, 20);
+                    canvas.translate(row, col);
+                    vector.draw(canvas);
+                }
+
+                //canvas.drawCircle(cx, cy, (float)diameter / 2, paint);
+
+            }
+        }
+
+
+    }
+}

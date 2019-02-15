@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Netwalk</string>
+    <string name="play">Play</string>
+    <string name="howToPlay">How To Play</string>
+    <string name="aboutButton">About</string>
+    <string name="newGame">New Game</string>
+    <string name="easyGame">Easy Game (4X4)</string>
+    <string name="mediumGame">Medium Game (6X6)</string>
+    <string name="hardGame">Hard Game (9X9)</string>
+    <string name="customGame">Custom Game</string>
+    <string name="rows">Rows:</string>
+    <string name="columns">Columns:</string>
+    <string name="startCustomGame">Start Custom Game</string>
+    <string name="rowPlaceholder">2</string>
+    <string name="columnPlaceholder">2</string>
+    <string name="customWarning">Please note: more rows and columns may have an impact on performance.</string>
+    <string name="about">Designed and created by Robert Taylor, i7437871 - Utilizing NetwalkGrid.java by Dr Paul De Vrieze.</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="defaultInfo">You finished the game in X taps. Why not try a harder difficulty, or maybe a custom game?</string>
+    <string name="mainMenu">Main Menu</string>
+    <string name="HTPTV">The idea of Netwalk is simple - you must connect each computer to the server. To achieve this you must rotate cables, computers and the server into their correct positions by tapping on them. Go careful though, there\'s a 1 in 100 chance that your grid will be randomly scrambled!</string>
+    <string name="imageDesc">From left to right: Computer, Server and Cable.</string>
+    <string name="iconStyle">Grid style:</string>
+    <string name="settings">Settings</string>
+    <string name="classic">Classic</string>
+    <string name="prototype">Prototype</string>
+    <string name="scrambleChence">Chance to scramble on tap:</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+</resources>

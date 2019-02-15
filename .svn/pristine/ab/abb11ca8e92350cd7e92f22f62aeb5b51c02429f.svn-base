@@ -1,0 +1,87 @@
+package com.example.robta.netwalk;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.widget.Toast;
+
+public class Game extends AppCompatActivity {
+
+    //Start new game
+    private static NetwalkGrid grid;
+
+    private GameView mGameView;
+    private GestureDetector mDetector;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        int rows = intent.getIntExtra("rows", 0);
+        int columns = intent.getIntExtra("columns", 0);
+
+        grid = new NetwalkGrid(rows, columns);
+
+        //Set activity to game activity
+        setContentView(R.layout.activity_game);
+        mGameView = new GameView(getApplicationContext());
+        setContentView(mGameView);
+
+        //Setup GestureDetector
+        mDetector = new GestureDetector(this, new gListener());
+    }
+
+    public static void endGame() {
+        //String endText = "GAME OVER - You ran out of time!";
+        //Toast.makeText(this, endText, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        //Only allow input while loop is true
+        //Detect if action was down to stop it firing twice
+        //Idea from http://stackoverflow.com/questions/8182513/ontouch-event-of-ontouchlistener-gets-called-twice-in-android
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            //Get coordinates of last tap
+            double currentX = e.getX();
+            double currentY = e.getY();
+
+            //Used for debugging - show X and Y coordinates as toast notification
+            //String XY = String.valueOf(currentX) + " " + String.valueOf(currentY);
+            //Toast.makeText(this, XY, Toast.LENGTH_LONG).show();
+
+            int x = (int) currentX;
+            int y = (int) currentY;
+
+            mGameView.calculateTappedCell(x, y);
+
+            //Used for debugging - get coordinates of tap
+            //int[] cell = mGameView.calculateTappedCell(x, y);
+            //String currentCell = "X: " + String.valueOf(cell[0]) + " Y: " + String.valueOf(cell[1]);
+            //Toast.makeText(this, currentCell, Toast.LENGTH_LONG).show();
+
+            //Used for debugging - find element that has been tapped
+            //int gridElement = mGameView.getTappedItem(x, y);
+            //String tappedElement = String.valueOf(gridElement);
+            //Toast.makeText(this, tappedElement, Toast.LENGTH_LONG).show();
+
+            boolean win = grid.checkPuzzleSolved();
+
+            if (win == true) {
+                String winText = "Congratulations, you win!";
+                Toast.makeText(this, winText, Toast.LENGTH_LONG).show();
+            }
+
+            return true;
+        }
+        return true;
+    }
+
+    public static NetwalkGrid getGrid() {
+        return grid;
+    }
+
+}

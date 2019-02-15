@@ -1,0 +1,51 @@
+package com.example.robta.netwalk;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.view.View;
+
+import static java.lang.Math.floor;
+
+/**
+ * Created by robta on 04/02/2017.
+ */
+
+public class GameView extends View{
+
+    private Paint mGridPaint;
+
+    public GameView(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        int rowCount = Game.getGrid().getRows();
+        int columnCount = Game.getGrid().getColumns();
+
+        double diameterX = floor(getWidth()/(columnCount+(columnCount+1)));
+        double diameterY = floor(getHeight()/(rowCount+(rowCount+1)));
+
+        double diameter;
+
+        if (diameterY <= diameterX) {
+            diameter = diameterX;
+        }
+        else {
+            diameter = diameterY;
+        }
+
+        double availableWidth = (columnCount+1) * diameter + columnCount * diameterX;
+        double availableHeight = (rowCount+1) * diameter + rowCount * diameterY;
+
+        mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mGridPaint.setStyle(Paint.Style.FILL);
+        mGridPaint.setColor(0xff0000ff);
+
+        canvas.drawRect(0, 0, (float)availableWidth, (float)availableHeight, mGridPaint);
+
+    }
+}

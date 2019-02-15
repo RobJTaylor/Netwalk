@@ -1,0 +1,391 @@
+package com.example.robta.netwalk;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.view.View;
+import android.widget.Toast;
+
+import java.util.Random;
+
+import static android.widget.Toast.LENGTH_LONG;
+
+/**
+ * Created by robta on 04/02/2017.
+ */
+
+public class GameView extends View {
+
+    public GameView(Context context) {
+        super(context);
+        init();
+    }
+
+    private int[] mOriginalGrid = new int[Game.getGrid().getColumns() * Game.getGrid().getRows()];
+    private int canvasWidth;
+    private int canvasHeight;
+    public int [] serverPosition = new int[2];
+
+
+    public void init() {
+        int yCells = Game.getGrid().getColumns();
+
+        int cellYNumber = 0;
+        int cellXNumber = 0;
+
+        for (int i = 0; i < mOriginalGrid.length; i++) {
+            //Determine if column needs to be adjusted
+            if (cellXNumber == yCells) {
+                cellYNumber++;
+                cellXNumber = 0;
+            }
+
+            //Store current element in original grid array
+            mOriginalGrid[i] = Game.getGrid().getGridElem(cellXNumber, cellYNumber);
+
+            //Scramble the current element
+            scrambleElement(cellXNumber, cellYNumber);
+
+            //Add 1 to cellXNumber
+            cellXNumber++;
+        }
+    }
+
+    public void scrambleElement(int cellXNumber, int cellYNumber) {
+        Random rand = new Random();
+        int random = rand.nextInt(6);
+
+        if (Game.getGrid().isServer(cellXNumber, cellYNumber) == true) {
+            serverPosition[0] = cellXNumber;
+            serverPosition[1] = cellYNumber;
+        }
+
+        for(int i = 0; i < random; i++) {
+
+            Game.getGrid().rotateRight(cellXNumber, cellYNumber);
+        }
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        //Get canvas dimensions
+        canvasWidth = canvas.getWidth();
+        canvasHeight = canvas.getHeight();
+
+        //Get rows and columns
+        int rowCount = Game.getGrid().getRows();
+        int columnCount = Game.getGrid().getColumns();
+
+        //Set current X and Y cell number
+        int cellXNumber = 0;
+        int cellYNumber = 0;
+
+        //Get total number of cells
+        int totalCount = rowCount * columnCount;
+
+        for (int i = 0; i < totalCount; i++) {
+            //Get cell width and height
+            int cellWidth = canvas.getWidth() / columnCount;
+            int cellHeight = canvas.getHeight() / rowCount;
+
+            //Adjust cell Y value when looping
+            if (cellXNumber == columnCount) {
+                cellYNumber++;
+                cellXNumber = 0;
+            }
+
+
+            //Code for bitmap modified from http://stackoverflow.com/questions/9691985/using-method-canvas-drawbitmapbitmap-src-dst-paint
+            //Code for bitmap resizing modified from http://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
+
+            Bitmap image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.appicon);
+            Bitmap resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+
+            int currentItem = Game.getGrid().getGridElem(cellXNumber, cellYNumber);
+
+            switch (currentItem) {
+                //Cases for straight lines
+                case 5:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.line_up_down);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 10:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.line_left_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                //Cases for L lines
+                case 9:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.l_down_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 3:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.l_down_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 6:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.l_up_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 12:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.l_up_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                //Cases for T lines
+                case 11:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.t_down_left_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 14:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.t_up_left_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 13:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.t_up_down_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 7:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.t_up_down_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                //Cases for connected servers
+                case 81:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_down);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 82:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 84:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_up);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 88:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 85:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_down_up);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 95:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_all);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 91:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_down_left_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 94:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_up_left_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 93:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_down_up_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 87:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_down_up_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 83:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_down_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 92:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.server_up_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                //Cases for unconnected computers
+                case 34:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.comp_right);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 40:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.comp_left);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 36:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.comp_up);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+                case 33:
+                    image = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.comp_down);
+                    resizedImage = Bitmap.createScaledBitmap(image, cellWidth, cellHeight, false);
+                    break;
+            }
+
+            //Calculate X and Y coordinates
+            int positionX = cellXNumber * cellWidth;
+            int positionY = cellYNumber * cellHeight;
+
+            //Draw bitmap at calculated coordinates
+            canvas.drawBitmap(resizedImage, positionX, positionY, null);
+
+            cellXNumber++;
+        }
+
+    }
+
+    public void redrawCanvas() {
+        invalidate();
+    }
+
+    public int[] calculateTappedCell(int x, int y) {
+        int cellWidth = canvasWidth / Game.getGrid().getColumns();
+        int cellHeight = canvasHeight / Game.getGrid().getRows();
+        int columns = Game.getGrid().getColumns();
+        int rows = Game.getGrid().getRows();
+
+        int tappedX = 0;
+        int tappedY = 0;
+
+        int currentColumn = 0;
+        int lastColumn;
+
+        int currentRow = 0;
+        int lastRow;
+
+
+        //Determine X cell
+        for (int i = 0; i <= columns; i++) {
+            currentColumn++;
+            lastColumn = currentColumn - 1;
+
+            int currentMax = currentColumn * cellWidth;
+            int currentMin = lastColumn * cellWidth;
+
+            if (x <= currentMax && x >= currentMin) {
+                tappedX = i;
+            }
+        }
+
+        //Determine Y cell
+        for (int i = 0; i <= rows; i++) {
+            currentRow++;
+            lastRow = currentRow - 1;
+
+            int currentMax = currentRow * cellHeight;
+            int currentMin = lastRow * cellHeight;
+
+            if (y <= currentMax && y >= currentMin) {
+                tappedY = i - 1;
+            }
+        }
+
+        int[] coordinates = new int[2];
+        coordinates[0] = tappedX;
+        coordinates[1] = tappedY;
+
+        /*If statements fix a bug where tapping past cells can trigger
+        an array out of bounds exception.*/
+        if(coordinates[0] == -1) {
+            coordinates[0] = 0;
+        }
+        if(coordinates[0] == columns + 1) {
+            coordinates[0] = columns;
+        }
+        if(coordinates[1] == -1) {
+            coordinates[1] = 0;
+        }
+        if(coordinates[1] == rows + 1) {
+            coordinates[1] = rows;
+        }
+
+        Game.getGrid().rotateRight(coordinates[0], coordinates[1]);
+
+        //Method to disconnect all connected pieces (- 64?)
+        //Implement connected images
+
+        Game.getGrid().disconnectAllCells();
+        Game.getGrid().checkConnections(serverPosition[0], serverPosition[1]);
+
+        redrawCanvas();
+
+        return coordinates;
+    }
+
+    public int getTappedItem(int x, int y) {
+        int cellWidth = canvasWidth / Game.getGrid().getColumns();
+        int cellHeight = canvasHeight / Game.getGrid().getRows();
+        int columns = Game.getGrid().getColumns();
+        int rows = Game.getGrid().getRows();
+
+        int tappedX = 0;
+        int tappedY = 0;
+
+        int currentColumn = 0;
+        int lastColumn;
+
+        int currentRow = 0;
+        int lastRow;
+
+
+        //Determine X cell
+        for (int i = 0; i <= columns; i++) {
+            currentColumn++;
+            lastColumn = currentColumn - 1;
+
+            int currentMax = currentColumn * cellWidth;
+            int currentMin = lastColumn * cellWidth;
+
+            if (x <= currentMax && x >= currentMin) {
+                tappedX = i;
+            }
+        }
+
+        //Determine Y cell
+        for (int i = 0; i <= rows; i++) {
+            currentRow++;
+            lastRow = currentRow - 1;
+
+            int currentMax = currentRow * cellHeight;
+            int currentMin = lastRow * cellHeight;
+
+            if (y <= currentMax && y >= currentMin) {
+                tappedY = i - 1;
+            }
+        }
+
+        int elementID = Game.getGrid().getGridElem(tappedX, tappedY);
+
+        return elementID;
+    }
+
+    public boolean checkWin() {
+        int yCells = Game.getGrid().getColumns();
+
+        int y = 0;
+        int x = 0;
+
+        //Compare original grid to current grid array
+        for (int i = 0; i < mOriginalGrid.length; i++) {
+            //Determine if column needs to be adjusted
+            if (x == yCells) {
+                y++;
+                x = 0;
+            }
+
+            //If grids don't match, return false
+            if (Game.getGrid().getGridElem(x, y) != mOriginalGrid[i]) {
+                return false;
+            }
+
+            //If grids do match and current position in array is 1 less than max position, return true
+            if (Game.getGrid().getGridElem(x, y) == mOriginalGrid[i] && i == mOriginalGrid.length - 1) {
+                return true;
+            }
+
+            //Add 1 to x
+            x++;
+        }
+
+        //Default return statement in-case above criteria isn't met
+        return false;
+    }
+
+}
+

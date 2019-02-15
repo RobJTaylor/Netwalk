@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Netwalk</string>
+    <string name="play">Play</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="options">Options</string>
+</resources>

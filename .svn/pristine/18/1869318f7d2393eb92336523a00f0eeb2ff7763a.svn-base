@@ -1,0 +1,19 @@
+package com.example.robta.netwalk;
+
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+
+/**
+ * Created by robta on 12/02/2017.
+ */
+
+public class gListener extends GestureDetector.SimpleOnGestureListener {
+
+    static String currentGestureDetected;
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        currentGestureDetected = e.toString();
+        return true;
+    }
+}

@@ -1,0 +1,69 @@
+package com.example.robta.netwalk;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.view.View;
+
+/**
+ * Created by robta on 04/02/2017.
+ */
+
+public class GameView extends View{
+
+    public GameView(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        //Get rows and columns
+        int rowCount = Game.getGrid().getRows();
+        int columnCount = Game.getGrid().getColumns();
+
+        //Set current X and Y cell number
+        int cellXNumber = 0;
+        int cellYNumber = rowCount - 1;
+
+        //Get total number of cells
+        int totalCount = rowCount * columnCount;
+
+        for (int count = 0; count < totalCount; count++) {
+            //Temporary code before more bitmaps are created, simply a proof of concept
+            //Store bitmap image in memory
+            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.l_green);
+
+            //Get cell width and height
+            int cellWidth = canvas.getWidth() / columnCount;
+            int cellHeight = canvas.getHeight() / rowCount;
+
+            //Adjust cell Y value when looping
+            if(cellXNumber == columnCount) {
+                cellYNumber--;
+                cellXNumber = 0;
+            }
+
+            //Resize bitmap to correct width and height
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, cellWidth, cellHeight, false);
+
+            //Calculate X and Y coordinates
+            int positionX = cellXNumber * cellWidth;
+            int positionY = cellYNumber * cellHeight;
+
+            //Draw bitmap at calculated coordinates
+            canvas.drawBitmap(resizedBitmap, positionX, positionY, null);
+
+            cellXNumber++;
+        }
+
+    }
+
+    public void redrawCanvas() {
+        invalidate();
+    }
+
+}
+

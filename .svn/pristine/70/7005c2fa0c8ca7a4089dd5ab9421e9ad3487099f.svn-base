@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Netwalk</string>
+    <string name="play">Play</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="aboutButton">About</string>
+    <string name="newGame">New Game</string>
+    <string name="easyGame">Easy Game (4X4)</string>
+    <string name="mediumGame">Medium Game (6X6)</string>
+    <string name="hardGame">Hard Game (9X9)</string>
+    <string name="customGame">Custom Game</string>
+    <string name="rows">Rows:</string>
+    <string name="columns">Columns:</string>
+    <string name="startCustomGame">Start Custom Game</string>
+    <string name="rowPlaceholder">2</string>
+    <string name="columnPlaceholder">2</string>
+    <string name="customWarning">Please note: more rows and columns may have an impact on performance. Scores on custom games will not be saved.</string>
+    <string name="about">Designed and created by Robert Taylor, i7437871 - Utilizing code created by Dr Paul De Vrieze.</string>
+</resources>

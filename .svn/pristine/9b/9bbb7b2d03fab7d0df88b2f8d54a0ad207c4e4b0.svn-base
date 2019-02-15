@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_game"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.robta.netwalk.NewGame">
+
+    <Button
+        android:text="@string/mediumGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mediumButton"
+        android:layout_below="@+id/easyButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="mediumGame"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:text="@string/hardGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mediumButton"
+        android:layout_alignParentStart="true"
+        android:id="@+id/hardButton"
+        android:layout_alignParentEnd="true"
+        android:onClick="hardGame"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:text="@string/newGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/newGameTV"
+        android:layout_alignParentEnd="true"
+        android:textSize="24sp" />
+
+    <TextView
+        android:text="@string/rows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rowsTV"
+        android:textSize="18sp"
+        android:layout_below="@+id/customGameTV"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/rowsTB"
+        android:layout_below="@+id/rowsTV"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/rowPlaceholder"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:text="@string/columns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/columnsTV"
+        android:textSize="18sp"
+        android:layout_below="@+id/rowsTB"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/columnsTB"
+        android:layout_below="@+id/columnsTV"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/columnPlaceholder"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:text="@string/easyGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/easyButton"
+        android:onClick="easyGame"
+        android:layout_below="@+id/newGameTV"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:text="@string/customGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/customGameTV"
+        android:textSize="24sp"
+        android:layout_below="@+id/hardButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:text="@string/customWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/customWarningTV"
+        android:textSize="14sp"
+        android:layout_below="@+id/columnsTB"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="@string/startCustomGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/customButton"
+        android:onClick="customGame"
+        android:layout_below="@+id/customWarningTV"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/colorPrimary" />
+</RelativeLayout>

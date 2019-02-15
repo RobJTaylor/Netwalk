@@ -1,0 +1,24 @@
+						     __     _                 _ _    
+						  /\ \ \___| |___      ____ _| | | __
+						 /  \/ / _ \ __\ \ /\ / / _` | | |/ /
+						/ /\  /  __/ |_ \ V  V / (_| | |   < 
+						\_\ \/ \___|\__| \_/\_/ \__,_|_|_|\_\
+						      Robert Taylor - i7437871
+Features:
+	- Two icon sets (classic - regular netwalk. Prototype - the images I used when prototyping the game).
+	- Random scramble - the game has a 1 in 100 chance to scramble during gameplay, this is to prevent the player from spam rotating,
+	  making them think about theur choices (can be toggled in settings).
+	- Settings page which allows toggling icon packs and random scramble.
+	- Multiple difficulties (easy, medium and hard).
+	- Custom game - allows user to specify how many rows and columns they wish to have.
+	- Game over activity with total taps the user made.
+	- How to play and About activities.
+	- Very basic compensation for when device is rotated (cell width and height is calculated) - it doesn't look pretty but it works.
+	- Check for grid completion based on original grid before scrambling.
+	- App icon and logo.
+
+Differences between implementation and design:
+	- Animations - did not make it into the game.
+	- Dark theme - I decided to use the standard Material theme instead, it's more pleasing.
+	- Timer - I ended up not implementing a timer due to the introduction of custom games - it would be silly to have a 90 second
+	  timer on a 100 x 100 grid.

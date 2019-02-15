@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="x86"
+    api-level="24"
+    density="xxhdpi"
+    format="8"
+    plugin-version="2.2.2"
+    timestamp="150081076472173"
+    token="2813637412691733164"
+    verifier="FULL_BUILD_REQUESTED" >
+
+    <task
+        name="javac"
+        duration="645" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="542" />
+    <task
+        name="verifier"
+        duration="125" />
+
+    <artifact
+        location="C:\Users\robta\Documents\Android Studio Projects\Netwalk\app\build\outputs\apk\app-debug.apk"
+        type="MAIN" />
+
+    <build
+        timestamp="150081076472173"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="C:\Users\robta\Documents\Android Studio Projects\Netwalk\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>
